@@ -9,20 +9,25 @@ Library supports configuring and following features of MAX31343 chip:
 - Enable, disable and configure freqeuncy for CLKO clock output
 - Configure both alarms with user friendly API
 - Retrieve alarm configuration of both alarms
+- Utilize integrated low-frequency count-down timer
 - Choose automatic and manual powering mode
 - Configure power fail treshold in automatic powering mode
 - Configure active power supply in manual powering mode
+- Check which power is currently used for powering chip
+- Configure Trickle charger
+- Configure, trigger converion and read temperature from integrated compensation temperature sensor
 - Disable (or enable) data retention and stopping (or reaenabling) oscillator
 - Enable or disable I2C timeout feature
+- Read and write persistent RAM of chip
 
 # Status
-Currently all features mentioned above were implemented and some of them was also tested on real hardware. Library is currently ported only to STM32 and PSoC 62 platforms. Only basic exmaples were implemented and many examples are not provided for all platforms.
+Currently all features mentioned above are implemented and some of them was also tested on real hardware. Library is currently ported only to STM32 and PSoC 62 platforms. Only basic exmaples were implemented and many examples are not provided for all platforms because it is very time consuming making all of these example projects for each platform.
 
-# Instalation
-Download ZIP folder with library for your platform in Release section and copy bundled files to your project. If you are using Makefile, cmake or other build system you must assign both .c files to compilation. If your platform is not supported, you must use generic verison and implement functions in `MAX31343_PlatformSpecific.c` according to notes in Porting section at the end of this page.
+# Installation
+Download ZIP folder with library for your platform in Release section and copy bundled files to your project. If you are using Makefile, cmake or other build system you must assign both .c files to compilation. If your platform is not supported, you must use generic verison and implement functions in `MAX31343_PlatformSpecific.c` according to notes in Porting section at the end of this page and comments in `MAX31343_PlatformSpecific.c` file.
 
 # Examples
-There are 32 examples.
+There are 33 examples.
 
 | Category         | Name                         | Link to example folder                       |
 | ---------------- | ---------------------------- | -------------------------------------------- |
@@ -38,7 +43,7 @@ There are 32 examples.
 | Alarm 1          | 31_DisableAlarm1			  | Example not implemented yet.                 |
 | Alarm 1          | 32_GetAlarm1Configuration	  | Example not implemented yet.                 |
 | Alarm 2          | 40_ConfigureAlarm2			  | Example not implemented yet.                 |
-| Alarm 1          | 41_DisableAlarm2			  | Example not implemented yet.                 |
+| Alarm 2          | 41_DisableAlarm2			  | Example not implemented yet.                 |
 | Alarm 2          | 42_GetAlarm2Configuration	  | Example not implemented yet.                 |
 | Powering options | 50_ManualPoweringMode        | Example not implemented yet.                 |
 | Powering options | 51_AutomaticPoweringMode     | Example not implemented yet.                 |
@@ -60,7 +65,7 @@ There are 32 examples.
 | System           | 85_DisableI2CTimeout         | Example not implemented yet.                 |
 | Interrupts       | 90_Interrupts                | [Details](examples/90_Interrupts)            |
 
-In README file in every example folder is described purpose of example, utilized function calls and their description. README contains platform independent code. Platform independent code do not check for function errors (consider using ASSERT or better checking mechanism), do not call any platform specific initialization (like system clocking or UART initialization) and contains printf call for printing text. Some examples was also ported to some 
+In README file in every example folder is described purpose of example, utilized function calls and their description. README contains platform independent code. Platform independent code do not check for function errors (consider using ASSERT or better checking mechanism), do not call any platform specific initialization (like system clocking or UART initialization) and contains printf call for printing text. Some examples was also ported to some platforms and you find folders with project developed using common development environment on this platform.
 
 # Porting
 If you want to integrate library to different platform than MAX32625, AVR, STM32 and PSoC62 you must use generic version of library and implement content of 4 or 5 functions (in case when you do not need for interrupt support, you can implement only 4 functions) in `MAX31343_PlatformSpecific.c` file. They are:
@@ -71,3 +76,11 @@ If you want to integrate library to different platform than MAX32625, AVR, STM32
 - `MAX31343_PlatformSpecific_WriteRegisters` must execute I2C transaction as described in comments in template.
 
 If you want support for external interrupts from MAX31343 you can configure peripheral for external interrupts in `MAX31343_PlatformSpecific_ConfigureExternalInterrupt` function.
+
+There are ports for:
+
+## STM32
+Platform spcific implementation use HAL and was tested using MAX31343 evaluation shield connected to NUCLEO-L552ZE-Q board. Pinout is configurable in `MAX31343_PlatformSpecific.h` file. You can change I2C driver instance (I2C1 by default), interrupt pin (PF15) and interrupt priority.
+
+## PSoC626
+Platform specific implementation use HAL library and was tested using MAX31343 evaluation shield connected to CY8CKIT-062S2-43012 development kit. Pinout is confgurable in `MAX31343_PlatformSpecific.h` file. You can change SDA and SCL pins (by default SDA is P6_1 and SCL is P6_0) and interrupt pin (P5_2 by default). Note that only allowed SDA and SCL pins are pins which can HAL library assign to the same SCB. Consult datasheet of your chip to get all possible configurations.
