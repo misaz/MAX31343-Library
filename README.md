@@ -71,7 +71,7 @@ In README file in every example folder is described purpose of example, utilized
 If you want to integrate library to different platform than MAX32625, AVR, STM32 and PSoC62 you must use generic version of library and implement content of 4 or 5 functions (in case when you do not need for interrupt support, you can implement only 4 functions) in `MAX31343_PlatformSpecific.c` file. They are:
 
 - `MAX31343_PlatformSpecific_Init` this function must initialize I2C driver used on your platform for accessing I2C bus. See details in comments in template.
-- `MAX31343_PlatformSpecific_Deinit` if you want to support deinitialization of I2C driver when no needed anymore, you can implement this in this function. If you do not need it, you do not need to implement this function.
+- `MAX31343_PlatformSpecific_Deinit` if you want to support deinitialization of I2C driver you can implement this in this function. If you do not need to deinitialize library, you do not need to implement this function.
 - `MAX31343_PlatformSpecific_ReadRegisters` must execute I2C transaction as described in comments in template.
 - `MAX31343_PlatformSpecific_WriteRegisters` must execute I2C transaction as described in comments in template.
 
