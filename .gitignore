@@ -1,0 +1,9 @@
+tests/out
+/.vs
+/src/.vs
+/examples/*/*_PSoC6/.mtbLaunchConfigs
+/examples/*/*_PSoC6/.settings
+/examples/*/*_STM32/.settings
+/examples/*/*_STM32/Debug
+/examples/*/*_STM32/*.launch
+/examples/mtb_shared
