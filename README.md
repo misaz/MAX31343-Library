@@ -79,8 +79,11 @@ If you want support for external interrupts from MAX31343 you can configure peri
 
 There are ports for:
 
+- STM32
+- PSoC 62
+
 ## STM32
 Platform spcific implementation use HAL and was tested using MAX31343 evaluation shield connected to NUCLEO-L552ZE-Q board. Pinout is configurable in `MAX31343_PlatformSpecific.h` file. You can change I2C driver instance (I2C1 by default), interrupt pin (PF15) and interrupt priority.
 
-## PSoC626
+## PSoC62
 Platform specific implementation use HAL library and was tested using MAX31343 evaluation shield connected to CY8CKIT-062S2-43012 development kit. Pinout is confgurable in `MAX31343_PlatformSpecific.h` file. You can change SDA and SCL pins (by default SDA is P6_1 and SCL is P6_0) and interrupt pin (P5_2 by default). Note that only allowed SDA and SCL pins are pins which can HAL library assign to the same SCB. Consult datasheet of your chip to get all possible configurations.
