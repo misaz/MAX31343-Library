@@ -5,6 +5,23 @@ static I2C_HandleTypeDef i2c;
 MAX31343_Status MAX31343_PlatformSpecific_Init() {
 	HAL_StatusTypeDef hStatus;
 
+	MAX31343_I2C_CLK_EN();
+	MAX31343_SDA_GPIO_CLOCK_EN();
+	MAX31343_SCL_GPIO_CLOCK_EN();
+
+	GPIO_InitTypeDef gpio;
+	gpio.Mode = GPIO_MODE_AF_OD;
+	gpio.Pull = GPIO_NOPULL;
+	gpio.Speed = GPIO_SPEED_FREQ_LOW;
+
+	gpio.Pin = MAX31343_SDA_GPIO_PIN;
+	gpio.Alternate = MAX31343_SDA_GPIO_AF;
+	HAL_GPIO_Init(MAX31343_SDA_GPIO, &gpio);
+
+	gpio.Pin = MAX31343_SCL_GPIO_PIN;
+	gpio.Alternate = MAX31343_SCL_GPIO_AF;
+	HAL_GPIO_Init(MAX31343_SCL_GPIO, &gpio);
+
 	i2c.Instance = MAX31343_I2C;
 	i2c.Init.Timing = 0x00A03AC8;
 	i2c.Init.OwnAddress1 = 0;
@@ -16,16 +33,6 @@ MAX31343_Status MAX31343_PlatformSpecific_Init() {
 	i2c.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
 
 	hStatus = HAL_I2C_Init(&i2c);
-	if (hStatus) {
-		return MAX31343_Status_I2CError;
-	}
-
-	hStatus = HAL_I2CEx_ConfigAnalogFilter(&i2c, I2C_ANALOGFILTER_ENABLE);
-	if (hStatus) {
-		return MAX31343_Status_I2CError;
-	}
-
-	hStatus = HAL_I2CEx_ConfigDigitalFilter(&i2c, 0);
 	if (hStatus) {
 		return MAX31343_Status_I2CError;
 	}
